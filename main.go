@@ -30,6 +30,9 @@ func main() {
 	case "wallet":
 		showWallet()
 
+	case "chain":
+		showChain()
+
 	case "wallets":
 		showWallets()
 
@@ -105,6 +108,7 @@ func loadWallets() (*Wallet, *Wallet, error) {
 // ============================================================
 // STATUS
 // ============================================================
+
 func showStatus() {
 
 	blockchain, err := loadLBNBlockchain()
@@ -124,9 +128,20 @@ func showStatus() {
 	fmt.Println("===== LBN NODE STATUS =====")
 	fmt.Println()
 
-	fmt.Println("Blockchain valid:", IsBlockchainValid(blockchain))
-	fmt.Println("Blockchain height:", len(blockchain.Blocks)-1)
-	fmt.Println("Active UTXOs:", len(utxoSet.Outputs))
+	fmt.Println(
+		"Blockchain valid:",
+		IsBlockchainValid(blockchain),
+	)
+
+	fmt.Println(
+		"Blockchain height:",
+		len(blockchain.Blocks)-1,
+	)
+
+	fmt.Println(
+		"Active UTXOs:",
+		len(utxoSet.Outputs),
+	)
 
 	fmt.Println()
 	fmt.Println("===== BALANCES =====")
@@ -136,7 +151,10 @@ func showStatus() {
 	files, err := os.ReadDir(".")
 
 	if err != nil {
-		fmt.Println("ERROR reading wallet files:", err)
+		fmt.Println(
+			"ERROR reading wallet files:",
+			err,
+		)
 		return
 	}
 
@@ -316,6 +334,45 @@ func showBalance() {
 		"Balance:",
 		FormatLBN(balance),
 	)
+}
+
+// ============================================================
+// CHAIN EXPLORER
+// ============================================================
+
+func showChain() {
+
+	blockchain, err := loadLBNBlockchain()
+
+	if err != nil {
+		fmt.Println("ERROR:", err)
+		return
+	}
+
+	fmt.Println("===== LBN BLOCKCHAIN =====")
+	fmt.Println()
+
+	for _, block := range blockchain.Blocks {
+
+		fmt.Println("Block:", block.Index)
+		fmt.Println("Hash:", block.Hash)
+		fmt.Println("Previous:", block.PreviousHash)
+		fmt.Println(
+			"Transactions:",
+			len(block.Transactions),
+		)
+		fmt.Println("Nonce:", block.Nonce)
+		fmt.Println(
+			"Difficulty:",
+			block.Difficulty,
+		)
+		fmt.Println(
+			"Valid Proof of Work:",
+			block.HasValidProofOfWork(),
+		)
+
+		fmt.Println()
+	}
 }
 
 // ============================================================
@@ -869,6 +926,10 @@ func showHelp() {
 
 	fmt.Println(
 		"go run . wallets - Show created wallets",
+	)
+
+	fmt.Println(
+		"go run . chain - Show blockchain blocks",
 	)
 
 	fmt.Println(
