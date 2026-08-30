@@ -1,0 +1,23 @@
+# Wallet private keys
+*.key
+
+# Blockchain state
+blockchain.json
+utxo.json
+
+# Blockchain backups
+blockchain_*_old.json
+blockchain_backup.json
+blockchain_before_protocol_change.json
+utxo_*_old.json
+utxo_backup.json
+utxo_before_protocol_change.json
+
+# Temporary working/backup files
+*.working
+*.broken-backup
+*.before-balance-fix
+
+# Generated wallet address files
+miner_address.txt
+recipient_address.txt
